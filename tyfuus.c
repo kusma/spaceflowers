@@ -248,7 +248,6 @@ lup:
 		movd mm0, [edi]
 		punpcklbw mm0, mm5
 		pmullw mm0, mm3
-		add esi, 4
 		psrlw mm0, 8
 		paddusw mm0, mm1
 		packuswb mm0, mm0
