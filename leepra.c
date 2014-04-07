@@ -15,7 +15,8 @@ static HMODULE library = 0;
 
 static LRESULT CALLBACK WndProc(HWND hWnd,UINT message,WPARAM wParam,LPARAM lParam);
 
-int width, height;
+static int width, height, scale = 1;
+static unsigned int *linebuf;
 BOOL fullscreen = TRUE;
 BOOL active=FALSE;
 HINSTANCE inst;
@@ -24,6 +25,20 @@ HINSTANCE inst;
 typedef void* (*CONVERTER) (void *dst,const void *src, unsigned int count);
 CONVERTER converter;
 CONVERTER get_converter( unsigned int bpp, unsigned int r_mask, unsigned int g_mask, unsigned int b_mask );
+
+static int switch_mode(int width, int height)
+{
+	HRESULT hr = IDirectDraw_SetDisplayMode(ddraw, width, height, 32);
+	if (FAILED(hr)){
+		hr = IDirectDraw_SetDisplayMode(ddraw, width, height, 24);
+		if (FAILED(hr)){
+			hr = IDirectDraw_SetDisplayMode(ddraw, width, height, 16);
+			if (FAILED(hr))
+				return FALSE;
+		}
+	}
+	return TRUE;
+}
 
 int leepra_open( char* title, int width_, int height_, BOOL fullscreen_){
 	DIRECTDRAWCREATE DirectDrawCreate;
@@ -49,21 +64,18 @@ int leepra_open( char* title, int width_, int height_, BOOL fullscreen_){
 	if(FAILED(result)) return FALSE;
 
 	if(fullscreen){
-		result = IDirectDraw_SetDisplayMode( ddraw, width, height, 32 );
-		if(FAILED(result)){
-			result = IDirectDraw_SetDisplayMode( ddraw, width, height, 24 );
-			if(FAILED(result)){
-				result = IDirectDraw_SetDisplayMode( ddraw, width, height, 16 );
-				if(FAILED(result)) return FALSE;
-			}
+		if (!switch_mode(width, height)) {
+			scale = 2;
+			if (!switch_mode(width * scale, height * scale))
+				return FALSE;
 		}
 	}
-
+	linebuf = malloc(sizeof(unsigned int) * width * scale);
 
 	rect.left = 0;
 	rect.top = 0;
-	rect.right = width;
-	rect.bottom = height;
+	rect.right = width * scale;
+	rect.bottom = height * scale;
 
 	if(!fullscreen){
 		style = WS_VISIBLE|WS_OVERLAPPED|WS_THICKFRAME|WS_CAPTION;
@@ -123,8 +135,8 @@ int leepra_open( char* title, int width_, int height_, BOOL fullscreen_){
 			pitch = descriptor.lPitch;
 
 			dst = (char*)descriptor.lpSurface;
-			for( y=height; y; y-- ){
-				memset(dst, 0, width*4);
+			for( y=height * scale; y; y-- ){
+				memset(dst, 0, width * scale * 4);
 				dst += pitch;
 			}
 			IDirectDrawSurface_Unlock( backbuffer, descriptor.lpSurface);
@@ -135,8 +147,8 @@ int leepra_open( char* title, int width_, int height_, BOOL fullscreen_){
 		desc.dwSize = sizeof(DDSURFACEDESC);
 		desc.dwFlags = DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH;
 		desc.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN;
-		desc.dwWidth = width;
-		desc.dwHeight = height;
+		desc.dwWidth = width * scale;
+		desc.dwHeight = height * scale;
 
 		result = IDirectDraw_CreateSurface( ddraw, &desc, &backbuffer, NULL );
 		if(FAILED(result)) return FALSE;
@@ -186,16 +198,32 @@ void leepra_update( void* data ){
 
 	pitch = descriptor.lPitch;
 
-	if(pitch==width){
-		converter(data, descriptor.lpSurface, width*height*4);
-	}else{
+	if (scale == 1 && pitch == width) {
+		converter(data, descriptor.lpSurface, width * height*4);
+	} else {
 		int y;
-		char* dst = (char*)descriptor.lpSurface;
-		char* src = (char*)data;
+		char *dst = (char*)descriptor.lpSurface;
+		unsigned int *src = (unsigned int *)data;
 		for(y=height; y; y--){
-			converter(dst, src, width*4);
-			src += width*4;
-			dst += pitch;
+			if (scale != 1) {
+				int x, i;
+				for (x = 0; x < width; ++x) {
+					/* repeat in x */
+					for (i = 0; i < scale; ++i) {
+						linebuf[x * scale + i] = src[x];
+					}
+				}
+
+				/* repeat in y */
+				for (i = 0; i < scale; ++i) {
+					converter(dst, linebuf, width * scale * 4);
+					dst += pitch;
+				}
+			} else {
+				converter(dst, src, width * 4);
+				dst += pitch;
+			}
+			src += width;
 		}
 	}
 
