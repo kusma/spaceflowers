@@ -313,7 +313,7 @@ int main(){
 			fuck_grid( grid, time*0.001f, 0.2f, (time-2*0x80)/4 );
 			tyfuus_expand_grid( screen, grid, loader256 );
 			tyfuus_blend( screen, motionblur, 255-4 );
-			tyfuus_gamma( screen, 1.0005f );
+			tyfuus_gamma( screen, 1.001f );
 			memcpy( motionblur->data, screen->data, 320*240*4 );
 
 		}else if(order<6){
