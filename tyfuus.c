@@ -16,6 +16,7 @@
 #include <ocidl.h>
 #include <olectl.h>
 #include <crtdbg.h>
+#include <emmintrin.h>
 #define HIMETRIC_INCH	2540
 
 #ifdef _DEBUG
@@ -27,33 +28,14 @@ void tyfuus_multiply( tyfuus_bitmap *bitmap1, tyfuus_bitmap *bitmap2 ){
 	unsigned int* buffer2 = bitmap2->data;
 	int len = bitmap2->width*bitmap2->height;
 
-	__asm{
-		mov edi, buffer1
-		mov esi, buffer2
-		mov ecx, len
-		pxor mm5, mm5
-
-align 16
-lup:
-		movd mm0, [edi]
-		movd mm1, [esi]
-		punpcklbw mm0, mm5
-		punpcklbw mm1, mm5
-
-		pmullw mm0, mm1
-		add esi, 4
-		psrlw mm0, 8
-		packuswb mm0, mm0
-		movd eax, mm0
-
-		mov [edi], eax
-		add edi, 4
-
-		dec ecx
-		jnz lup
-
-		emms
+	__m64 zero = _mm_cvtsi32_si64(0);
+	while (--len) {
+		__m64 src0 = _mm_unpacklo_pi8(_mm_cvtsi32_si64(*buffer1), zero);
+		__m64 src1 = _mm_unpacklo_pi8(_mm_cvtsi32_si64(*buffer2++), zero);
+		__m64 result = _mm_srli_pi16(_mm_mullo_pi16(src0, src1), 8);
+		*buffer1++ = _mm_cvtsi64_si32(_mm_packs_pu16(result, result));
 	}
+	_mm_empty();
 }
 
 void tyfuus_blend( tyfuus_bitmap *bitmap1, tyfuus_bitmap *bitmap2, unsigned char alpha ){
