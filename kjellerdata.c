@@ -2126,7 +2126,7 @@ object *load_kjeller(){
 			vertex_index[i][j] = vi;
 			uv_index[i][j] = ti;
 		}
-		material_index[i] = material_ref[mindex][0];
+		material_index[i] = material_ref[mindex-1][0];
 	}
 
 	for( i=0; i<3708; i++ ){

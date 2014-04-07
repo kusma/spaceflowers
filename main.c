@@ -246,12 +246,12 @@ int main(){
 	sphere_deformed = copy_object( sphere );
 
 	/* funky old kjeller */
-	kjeller->materials[0].rendermode = RENDER_TEXTUREMAP | RENDER_FLATSHADE;
-	kjeller->materials[0].texture = kjeller_gulv->data;
+	kjeller->materials[1].rendermode = RENDER_TEXTUREMAP | RENDER_FLATSHADE;
+	kjeller->materials[1].texture = kjeller_gulv->data;
 
-	kjeller->materials[1].rendermode = RENDER_TEXTUREMAP | RENDER_ENVMAP;
-	kjeller->materials[1].texture = kjeller_roer->data;
-	kjeller->materials[1].envmap = udefinerbar_env->data;
+	kjeller->materials[0].rendermode = RENDER_TEXTUREMAP | RENDER_ENVMAP;
+	kjeller->materials[0].texture = kjeller_roer->data;
+	kjeller->materials[0].envmap = udefinerbar_env->data;
 
 	/* the magic battery from indre troms */
 	batteri->materials[0].rendermode = RENDER_FLATSHADE|RENDER_TEXTUREMAP;
