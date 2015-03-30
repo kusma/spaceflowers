@@ -116,7 +116,7 @@ void draw_flat_triangle( unsigned int *buffer, vertex_2d v[3], unsigned int colo
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -404,7 +404,7 @@ void draw_perfect_texture_flat_triangle( unsigned int *buffer, vertex_2d v[3], t
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -740,7 +740,7 @@ void draw_perfect_texture_triangle( unsigned int *buffer, vertex_2d v[3], texcoo
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -1119,7 +1119,7 @@ void draw_perfect_multi_texture_triangle( unsigned int *buffer, vertex_2d v[3], 
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -1573,7 +1573,7 @@ void draw_perfect_bump_texture_triangle( unsigned int *buffer, vertex_2d v[3], t
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -2010,7 +2010,7 @@ void draw_perfect_envbump_texture_triangle( unsigned int *buffer, vertex_2d v[3]
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;
@@ -2347,7 +2347,7 @@ void draw_texture_triangle( unsigned int *buffer, vertex_2d v[3], texcoord uv[3]
 	ylen2 = v[2].y-v[1].y;
 
 	// kalkuler lengste scanline (den ved v[1]) osv,
-	// for å slippe divisjoner i hline
+	// for Ã¥ slippe divisjoner i hline
 	zdiv[0] = 1.0f/v[0].z;
 	zdiv[1] = 1.0f/v[1].z;
 	zdiv[2] = 1.0f/v[2].z;

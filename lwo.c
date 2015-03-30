@@ -6,12 +6,12 @@
 
 #define CHUNK_FORM 0x4d524f46
 #define CHUNK_TAGS 0x53474154
-#define CHUNK_LAYR 0x5259414c // parser ikke denne nå
+#define CHUNK_LAYR 0x5259414c // parser ikke denne nÃ¥
 #define CHUNK_PNTS 0x53544e50
-#define CHUNK_BBOX 0x584f4242 // parser ikke denne nå
+#define CHUNK_BBOX 0x584f4242 // parser ikke denne nÃ¥
 #define CHUNK_POLS 0x534c4f50
-#define CHUNK_PTAG 0x47415450 // parser ikke ennå
-#define CHUNK_SURF 0x46525553 // parser ikke ennå
+#define CHUNK_PTAG 0x47415450 // parser ikke ennÃ¥
+#define CHUNK_SURF 0x46525553 // parser ikke ennÃ¥
 #define CHUNK_VMAP 0x50414d56
 #define CHUNK_VMAD 0x44414d56
 
@@ -178,7 +178,7 @@ void read_pols_chunk( file *file, int len ){
 			file_seek( file, sizeof(unsigned short)*flags, SEEK_CUR );
 		}else{
 			unsigned short temp[3];
-			// TODO: fiks så den bruker VX-saker her
+			// TODO: fiks sÃ¥ den bruker VX-saker her
 			file_read( temp, sizeof(unsigned short), flags, file );
 			if( facecount<MAX_FACES ){
 				vertex_index[facecount][0] = swap_short(temp[0]);

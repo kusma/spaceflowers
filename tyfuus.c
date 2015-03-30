@@ -288,8 +288,8 @@ void tyfuus_invert( tyfuus_bitmap *bitmap1, unsigned char invert ){
 //	static short white[]= {0xff,0xff,0xff,0xff};
 //	unsigned short invert[] = {gamma, gamma, gamma, gamma};
 
-	// bør skrives om i assembler med mmx og i 1-mul-variant
-	// tarre når jeg kjeder meg... :P
+	// bÃ¸r skrives om i assembler med mmx og i 1-mul-variant
+	// tarre nÃ¥r jeg kjeder meg... :P
 	for( counter=bitmap1->width*bitmap1->height; counter; counter-- ){
 		*src = (((255-*src)*invert)+(*src*(inv_invert)))>>8;
 		src++;

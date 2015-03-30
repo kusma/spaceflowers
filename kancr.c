@@ -426,7 +426,7 @@ void draw_object( unsigned int *screen, object *object, camera *cam ){
 			}
 			if( material->rendermode&RENDER_PHONGMAP ){
 
-				// dette er fake-phong'ing, trenger litt flere triks for å funke SKIKKELIG. (fjerne bakside-lyslegging osv :P)
+				// dette er fake-phong'ing, trenger litt flere triks for Ã¥ funke SKIKKELIG. (fjerne bakside-lyslegging osv :P)
 				// tror 3dica forklarer detta
 				vector cam_normals[3];
 				cam_normals[0] = vector_normalize( matrix_rotatevector( object->matrix, object->normals[face->vertex[0].normal] ));
