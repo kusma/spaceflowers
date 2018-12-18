@@ -1,68 +1,99 @@
-#ifndef __VECTOR_H__
-#define __VECTOR_H__
+/*
+ * HIW (Hyper Ineffective World) Engine
+ *
+ * If you are not an excess coder, you should not have this file.
+ * Not even our musicians are allowed to have this file, beacuse of
+ * GayProtection(tm).
+ *
+ * Now, piss off!
+ *
+ */
+
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <math.h>
 
-typedef struct{
+class Vector {
+public:
+	Vector(){
+	}
+
+	Vector(const float x, const float y, const float z){
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
+	inline Vector operator+(const Vector v) const{
+		return Vector(this->x + v.x, this->y + v.y, this->z + v.z);
+	}
+
+	inline Vector &operator+=(const Vector v){
+		this->x += v.x;
+		this->y += v.y;
+		this->z += v.z;
+
+		return *this;
+	}
+
+	inline Vector operator-(const Vector v) const{
+		return Vector(this->x - v.x, this->y - v.y, this->z - v.z);
+	}
+
+	inline Vector &operator-=(const Vector v){
+		this->x -= v.x;
+		this->y -= v.y;
+		this->z -= v.z;
+
+		return *this;
+	}
+
+	inline Vector operator*(const float s) const{
+		return Vector(this->x * s, this->y * s, this->z * s);
+	}
+
+	inline Vector &operator*=(const float s){
+		this->x *= s;
+		this->y *= s;
+		this->z *= s;
+
+		return *this;
+	}
+
+	inline float operator*(const Vector v) const{
+		return (this->x * v.x + this->y * v.y + this->z * v.z) /
+			(float)sqrt((this->x * this->x + this->y * this->y + this->z * this->z) *
+			     (v.x * v.x + v.y * v.y + v.z * v.z));
+	}
+
+	inline Vector operator/(const float s) const{
+		return *this * (1.0f / s);
+	}
+
+	inline Vector &operator/=(const float s){
+		*this *= (1.0f / s);
+		return *this;
+	}
+
+	inline Vector cross_product(const Vector v) const{
+		return Vector(this->y * v.z - this->z * v.y,
+			      this->z * v.x - this->x * v.z,
+			      this->x * v.y - this->y * v.x);
+	}
+
+	inline float magnitude() const{
+		return (float)sqrt(this->x * this->x +
+			    this->y * this->y +
+			    this->z * this->z);
+	}
+
+	inline Vector &normalize(){
+		*this *= (1.0f / this->magnitude());
+		return *this;
+	}
+
 	float x, y, z;
-}vector;
+};
 
-
-__inline vector vector_make( float x, float y, float z ){
-	vector temp;
-	temp.x = x;
-	temp.y = y;
-	temp.z = z;
-	return temp;
-}
-
-__inline vector vector_add( vector v1, vector v2 ){
-	vector temp;
-	temp.x = v1.x + v2.x;
-	temp.y = v1.y + v2.y;
-	temp.z = v1.z + v2.z;
-	return temp;
-}
-
-__inline vector vector_sub( vector v1, vector v2 ){
-	vector temp;
-	temp.x = v1.x - v2.x;
-	temp.y = v1.y - v2.y;
-	temp.z = v1.z - v2.z;
-	return temp;
-}
-
-__inline vector vector_scale( vector v, float scalar ){
-	vector temp;
-	temp.x = v.x * scalar;
-	temp.y = v.y * scalar;
-	temp.z = v.z * scalar;
-	return temp;
-}
-
-__inline float vector_magnitude( vector v ){
-	return (float)sqrt(v.x*v.x+v.y*v.y+v.z*v.z);
-}
-
-__inline vector vector_normalize(vector v){
-	vector temp;
-	float scale = 1.f/vector_magnitude(v);
-	temp.x = v.x*scale;
-	temp.y = v.y*scale;
-	temp.z = v.z*scale;
-	return temp;
-}
-
-__inline float vector_dotproduct( vector v1, vector v2 ){
-	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-}
-
-__inline vector vector_crossproduct( const vector v1, const vector v2 ){
-	vector temp;
-	temp.x = (v1.y*v2.z)-(v1.z*v2.y);
-	temp.y = (v1.z*v2.x)-(v1.x*v2.z);
-	temp.z = (v1.x*v2.y)-(v1.y*v2.x);
-	return temp;
-}
-
-#endif /* __VECTOR_H__ */
+#endif //VECTOR_H

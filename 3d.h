@@ -1,62 +1,67 @@
 #ifndef __3D_H__
 #define __3D_H__
 
+#ifdef WIDTH
+#undef WIDTH
+#endif
+#ifdef HEIGHT
+#undef HEIGHT
+#endif
+
+#define WIDTH 512
+#define HEIGHT 256
+
 #include "vector.h"
+//#include "2d.h"
 #include "matrix.h"
 
 typedef struct{
 	int index;
-	int normal;
 	float u, v;
-}vertex;
+	Vector normal;
+}Vertex;
 
 typedef struct{
 	unsigned int *texture;
 	unsigned int *lightmap;
-}material;
+}Material;
 
 typedef struct{
-	vertex vertex[3];
-	vector normal;
+	Vertex a, b, c;
+	Vector normal;
 	int smooth;
 	int mesh;
-}face;
+//	Material *material;
+}Face;
 
 typedef struct{
-	material *material;
-}mesh;
+	Material *material;
+}Mesh;
 
 typedef struct{
-	matrix matrix;
-	vector *vertices;
+	Matrix matrix;
+	Vector *vertices;
 	int vertex_count;
-	vector *normals;
-	int normal_count;
-	face *faces;
+	Face *faces;
 	int face_count;
-	mesh *meshes;
+	Mesh *meshes;
 	int mesh_count;
-}object;
+}Object;
 
 typedef struct{
-	int x, y;
-	unsigned int z;
+	int x, y, z;
 	int u,v;
 	int u2, v2;
-}vertex2D;
+}Vertex2D;
 
-#include <math.h>
 
-/* lowlevel */
-void start_frame();
-void generate_normals( object *object );
-void render_object( object *object, unsigned int *buffer );
-/*
-  void end_frame( unsigned int *buffer ); <- tegne et s-buffer?
-*/
+Object *load_lwo( char *filename );
 
-/* lowest level */
-void flat_triangle( unsigned int *target, vertex2D v[3], unsigned int color );
-void texture_triangle( unsigned int* target, vertex2D v[3], unsigned int* texture );
+// lowlevel
+void generate_normals( Object& object );
+void render_object( Object &object, unsigned int *buffer );
 
-#endif /* __3D_H__ */
+// lowest level
+void flat_triangle( unsigned int *target, Vertex2D v[3], unsigned int color );
+
+#endif

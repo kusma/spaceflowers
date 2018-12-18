@@ -1,19 +1,33 @@
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef FILE_H
+#define FILE_H
 
-#define RAR_SUPPORT
-#define ARCHIVE "data.ulf"
-#define PASSWORD "roar1337"
+class File{
+protected:
+	unsigned char* data;
+	int len;
+	unsigned char* pos;
+public:
+	File(unsigned char* data, int len);
+	~File();
+	void* GetFile();
+	void Read(void* dest, int bytes);
+	void Rewind();
+	int GetSize();
+	bool Eof();
+};
 
-typedef struct{
-	unsigned int size;
-	unsigned char *data;
-	unsigned int pos;
-}file;
+class FileLoader{
+protected:
+	char* archive;
+	char* password;
+private:
+	FileLoader();//{};
+public:
+	//FileLoader(char* archive);
+	static FileLoader* instance();
+	SetArchive(char* archive);
+	SetPassword(char* password);
+	File* GetFile(char* filename);
+};
 
-file* file_open( char *filename );
-int file_close( file *file );
-
-int file_tell( file *file );
-size_t file_read( void *buffer, size_t size, size_t number, file *file );
-int file_seek( file *file, __int64 offset, int mode );
+#endif //FILE_H
